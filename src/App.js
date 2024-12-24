@@ -18,7 +18,8 @@ function App() {
         <Navbar />
 
 
-        <Routes>
+      <div className="content-holder">
+       <Routes>
           <Route path='/' element={<Home />}></Route>
           <Route path='/products' element={<Products/>}></Route>
           <Route path='order-request' element={<OrderRequest/>} ></Route>
@@ -26,6 +27,7 @@ function App() {
           <Route path='contact-us' element={<ContactUs/>}></Route>
           <Route path='about-us' element={<AboutUs/>}></Route>
         </Routes>
+      </div>
       </Router>
     </div>
   );
