@@ -12,7 +12,7 @@ const Products = () => {
         }))
     );
 
-    const [cart, setCart] = useState({ TotalItems: 0, TotamAmount: 0, Items: [] });
+    const [cart, setCart] = useState({ TotalItems: 0, TotalAmount: 0, Items: [] });
 
     useEffect(() => {
         const storedCart = JSON.parse(localStorage.getItem('cart'));
@@ -42,7 +42,7 @@ const Products = () => {
 
             return {
                 TotalItems: updatedItems.length,
-                TotamAmount: prevCart.TotamAmount + selectedProduct.price,
+                TotalAmount: prevCart.TotalAmount + selectedProduct.price,
                 Items: updatedItems,
             };
         });
@@ -65,7 +65,7 @@ const Products = () => {
             );
             return {
                 TotalItems: prevCart.TotalItems, // Total items remain unchanged
-                TotamAmount: prevCart.TotamAmount + selectedProduct.price,
+                TotalAmount: prevCart.TotalAmount + selectedProduct.price,
                 Items: updatedItems,
             };
         });
@@ -95,13 +95,13 @@ const Products = () => {
                     : item
             ).filter((item) => item.quantity > 0);
 
-            const newTotamAmount = itemToRemove
-                ? prevCart.TotamAmount - (itemToRemove.quantity * selectedProduct.price)
-                : prevCart.TotamAmount - selectedProduct.price;
+            const newTotalAmount = itemToRemove
+                ? prevCart.TotalAmount - (itemToRemove.quantity * selectedProduct.price)
+                : prevCart.TotalAmount - selectedProduct.price;
 
             return {
                 TotalItems: updatedItems.length, // Update total unique items
-                TotamAmount: Math.max(0, Math.round(newTotamAmount * 100) / 100), // Ensure no negative or floating-point precision issues
+                TotalAmount: Math.max(0, Math.round(newTotalAmount * 100) / 100), // Ensure no negative or floating-point precision issues
                 Items: updatedItems,
             };
         });
