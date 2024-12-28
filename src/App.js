@@ -1,7 +1,6 @@
 import './App.css';
 import Header from './components/header/Header';
 import Navbar from './components/navbar/Navbar';
-import Home from './components/Home';
 import Products from './components/products/Products';
 import AboutUs from './components/extra/AboutUs';
 import ContactUs from './components/extra/ContactUs';
