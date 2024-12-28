@@ -19,7 +19,7 @@
     border-bottom-left-radius: 18px;
 }
 #expandable-div.expanded{
-    height: 500px;
+    height: 450px;
     width: 350px;
     border-radius: 10px;
 }

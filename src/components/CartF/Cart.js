@@ -8,7 +8,10 @@ const Cart = () => {
         divClass.classList.toggle('expanded');
         divClass.classList.toggle('collapse');
     };
-
+    const clearCart = () =>{
+        localStorage.removeItem('cart');
+        alert('Cart has been cleared!');
+    };
     return (
         <div id='expandable-div' className='collapse'>
             <div className='collapse-content' onClick={toggleClass}>
@@ -19,7 +22,9 @@ const Cart = () => {
             <div className='expandable-content'>
                 <button className='cross-btn' onClick={toggleClass}>&times;</button>
                 <div className="scrollable-content">
-                    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fugiat placeat pariatur, eligendi minus, atque quia adipisci totam quos velit aut porro ducimus minima officia recusandae modi expedita rerum consequuntur obcaecati.Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fugiat placeat pariatur, eligendi minus, atque quia adipisci totam quos velit aut porro ducimus minima officia recusandae modi expedita rerum consequuntur obcaecati.Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fugiat placeat pariatur, eligendi minus, atque quia adipisci totam quos velit aut porro ducimus minima officia recusandae modi expedita rerum consequuntur obcaecati.Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fugiat placeat pariatur, eligendi minus, atque quia adipisci totam quos velit aut porro ducimus minima officia recusandae modi expedita rerum consequuntur obcaecati.Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fugiat placeat pariatur, eligendi minus, atque quia adipisci totam quos velit aut porro ducimus minima officia recusandae modi expedita rerum consequuntur obcaecati.</p>
+
+                    <p>Lorem ipsum dom quos velit aut porro ducimus minima officia recusandae modi expedita rerum caut porro ducimus minima officia recusandae modi expedita rerum consequuntur obcaecati.</p>
+                    <button onClick={clearCart}>Clear the Cart</button>
                 </div>
             </div>
         </div>
