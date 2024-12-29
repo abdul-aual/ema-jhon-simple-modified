@@ -3,42 +3,51 @@ import fakeData from '../fakedata/fakeData.json';
 import Productt from './Productt';
 
 const Products = () => {
-    const first20 = fakeData.slice(0, 20);
-    const [products, setPro] = useState(
-        first20.map((product) => ({
-            ...product,
-            clicked: false,
-            quantity: 0,
-        }))
-    );
+    const [products, setProducts] = useState([]); // Stores product data
+    const [cart, setCart] = useState(null); // Initially null to indicate uninitialized
 
-    const [cart, setCart] = useState({ TotalItems: 0, TotalAmount: 0, Items: [] });
-
+    // Load cart and sync with products when the component mounts
     useEffect(() => {
-        const storedCart = JSON.parse(localStorage.getItem('cart'));
-        if (storedCart) {
-            setCart(storedCart);
+        const storedCart = JSON.parse(localStorage.getItem('cart')) || { TotalItems: 0, TotalAmount: 0, Items: [] };
+        const first20 = fakeData.slice(0, 20);
+
+        // Sync products with stored cart
+        const updatedProducts = first20.map((product) => {
+            const cartItem = storedCart.Items.find((item) => item.key === product.key);
+            return cartItem
+                ? { ...product, clicked: true, quantity: cartItem.quantity }
+                : { ...product, clicked: false, quantity: 0 };
+        });
+
+        setProducts(updatedProducts);
+        setCart(storedCart); // Load stored cart into state
+    }, []); // Run only on mount
+
+    // Save cart to local storage whenever it changes
+    useEffect(() => {
+        if (cart) {
+            localStorage.setItem('cart', JSON.stringify(cart));
         }
-    }, []);
-
-    useEffect(() => {
-        localStorage.setItem('cart', JSON.stringify(cart));
     }, [cart]);
 
     const handleClickBtn = (key) => {
         const selectedProduct = products.find((product) => product.key === key);
+
+        // Update the products state
         const updatedProducts = products.map((product) =>
             product.key === key
                 ? { ...product, clicked: true, quantity: 1 }
                 : product
         );
-        setPro(updatedProducts);
+        setProducts(updatedProducts);
 
+        // Update the cart state
         setCart((prevCart) => {
             const existingItem = prevCart.Items.find((item) => item.key === key);
+
             const updatedItems = existingItem
                 ? prevCart.Items
-                : [...prevCart.Items, { ...selectedProduct, quantity: 1, clicked: true }];
+                : [...prevCart.Items, { ...selectedProduct, quantity: 1 }];
 
             return {
                 TotalItems: updatedItems.length,
@@ -50,13 +59,16 @@ const Products = () => {
 
     const inc = (key) => {
         const selectedProduct = products.find((product) => product.key === key);
+
+        // Update the products state
         const updatedProducts = products.map((product) =>
             product.key === key
                 ? { ...product, quantity: product.quantity + 1 }
                 : product
         );
-        setPro(updatedProducts);
+        setProducts(updatedProducts);
 
+        // Update the cart state
         setCart((prevCart) => {
             const updatedItems = prevCart.Items.map((item) =>
                 item.key === key
@@ -64,7 +76,7 @@ const Products = () => {
                     : item
             );
             return {
-                TotalItems: prevCart.TotalItems, // Total items remain unchanged
+                TotalItems: prevCart.TotalItems,
                 TotalAmount: prevCart.TotalAmount + selectedProduct.price,
                 Items: updatedItems,
             };
@@ -73,35 +85,30 @@ const Products = () => {
 
     const dec = (key) => {
         const selectedProduct = products.find((product) => product.key === key);
+
+        // Update the products state
         const updatedProducts = products.map((product) =>
             product.key === key
                 ? {
-                    ...product,
-                    quantity: product.quantity > 1
-                        ? product.quantity - 1
-                        : 0,
-                    clicked: product.quantity > 1,
-                }
+                      ...product,
+                      quantity: product.quantity > 1 ? product.quantity - 1 : 0,
+                      clicked: product.quantity > 1,
+                  }
                 : product
         );
-        setPro(updatedProducts);
+        setProducts(updatedProducts);
 
+        // Update the cart state
         setCart((prevCart) => {
-            const itemToRemove = prevCart.Items.find((item) => item.key === key && item.quantity === 1);
-
             const updatedItems = prevCart.Items.map((item) =>
                 item.key === key
                     ? { ...item, quantity: item.quantity - 1 }
                     : item
             ).filter((item) => item.quantity > 0);
 
-            const newTotalAmount = itemToRemove
-                ? prevCart.TotalAmount - (itemToRemove.quantity * selectedProduct.price)
-                : prevCart.TotalAmount - selectedProduct.price;
-
             return {
-                TotalItems: updatedItems.length, // Update total unique items
-                TotalAmount: Math.max(0, Math.round(newTotalAmount * 100) / 100), // Ensure no negative or floating-point precision issues
+                TotalItems: updatedItems.length,
+                TotalAmount: Math.max(0, prevCart.TotalAmount - selectedProduct.price),
                 Items: updatedItems,
             };
         });
@@ -116,7 +123,7 @@ const Products = () => {
                     inc={inc}
                     dec={dec}
                     key={index}
-                ></Productt>
+                />
             ))}
         </div>
     );
