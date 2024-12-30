@@ -1,3 +1,6 @@
+body{
+    position: fixed;
+}
 #expandable-div{
     position: fixed;
     top:50%;

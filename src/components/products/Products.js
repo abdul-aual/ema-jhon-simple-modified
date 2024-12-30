@@ -56,6 +56,7 @@ const Products = () => {
             };
         });
     };
+    
 
     const inc = (key) => {
         const selectedProduct = products.find((product) => product.key === key);
